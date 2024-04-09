@@ -1,14 +1,22 @@
-package handlers
+package order
 
 import (
 	"errors"
+	appRepo "github.com/IsThatASkyline/fiberGo/internal/application/order/interfaces/repo"
 	"github.com/IsThatASkyline/fiberGo/internal/infrastructure/db/models"
-	"gorm.io/gorm"
+	"github.com/IsThatASkyline/fiberGo/internal/infrastructure/db/repo"
 )
 
-func GetOrder(db *gorm.DB, uid string) (models.Order, error) {
+type RepoImpl struct {
+	repo.BaseGormRepo
+	appRepo.OrderRepo
+}
+
+// TODO: Конвертировать все в ДТО
+
+func (repo *RepoImpl) GetOrder(uid string) (models.Order, error) {
 	var order models.Order
-	err := db.Model(&models.Order{}).Preload("Tickets").Find(&order, uid).Error
+	err := repo.Session.Model(&models.Order{}).Preload("Tickets").Find(&order, uid).Error
 	if err != nil {
 		return order, errors.New("the result set is empty, Orders")
 	}
@@ -16,20 +24,17 @@ func GetOrder(db *gorm.DB, uid string) (models.Order, error) {
 	return order, nil
 }
 
-// TODO: Понять что нужно для создания ордера
-/*
-func SetOrder(order models.Order, db *gorm.DB) error {
-	err := db.Create(&models.Order{E: order.E, Tickets: order.Tickets}).Error
-	if err != nil {
-		return errors.New("Ошибка при создании концерта")
+func (repo *RepoImpl) AddOrder(order *models.Order) error {
+	result := repo.Session.Omit("Tickets.*").Create(&order)
+	if result.Error != nil {
+		return result.Error
 	}
 	return nil
 }
-*/
 
-func GetOrders(db *gorm.DB) ([]models.Order, error) {
+func (repo *RepoImpl) GetAllOrders() ([]models.Order, error) {
 	var orders []models.Order
-	err := db.Model(&models.Order{}).Preload("Tickets").Find(&orders).Error
+	err := repo.Session.Model(&models.Order{}).Preload("Tickets").Find(&orders).Error
 	if err != nil {
 		return orders, errors.New("the result set is empty, Orders")
 	}
