@@ -7,8 +7,6 @@ import (
 )
 
 func BuildConnection(config config.DBConfig) *gorm.DB {
-	// TODO: Убрать в env параметры
-	// db, err := gorm.Open(postgres.New(postgres.Config{DSN: "host=127.0.0.1 port=5432 user=postgres dbname=orders password=postgres sslmode=disable"}))
 	db, err := gorm.Open(postgres.Open(config.FullDNS()))
 	sqlDB, errSQL := db.DB()
 	if errSQL != nil {
