@@ -6,12 +6,8 @@ import (
 	"go.uber.org/fx"
 )
 
-type orderServiceImpl struct {
-	repo.OrderRepo
-}
-
 func NewOrderService(repo repo.OrderRepo) services.OrderService {
-	return &orderServiceImpl{
+	return &services.OrderServiceImpl{
 		OrderRepo: repo,
 	}
 }

@@ -6,3 +6,7 @@ import "github.com/IsThatASkyline/fiberGo/order/internal/application/order/inter
 type OrderService interface {
 	repo.OrderRepo
 }
+
+type OrderServiceImpl struct {
+	repo.OrderRepo
+}
