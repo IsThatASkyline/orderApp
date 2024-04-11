@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"github.com/IsThatASkyline/fiberGo/order/internal/infrastructure/logger"
 	"github.com/IsThatASkyline/fiberGo/order/internal/presentation/api/config"
 	"github.com/IsThatASkyline/fiberGo/order/internal/presentation/api/controllers/routes"
 	"github.com/IsThatASkyline/fiberGo/order/internal/presentation/api/engine"
@@ -18,6 +19,7 @@ var Module = fx.Options(
 func Start(
 	lifecycle fx.Lifecycle,
 	router engine.RequestHandler,
+	logger logger.Logger,
 	config config.APIConfig,
 	routers routes.Routes, //nolint:all
 ) {
@@ -26,11 +28,11 @@ func Start(
 	lifecycle.Append(
 		fx.Hook{
 			OnStart: func(context.Context) error {
-				fmt.Printf("Starting application in :%d", config.Port)
+				logger.Info(fmt.Sprintf("Starting application in :%d", config.Port))
 				go func() {
 					defer func() {
 						if r := recover(); r != nil {
-							fmt.Printf("Recovered when boot api server, r %s", r)
+							logger.Info(fmt.Sprintf("Recovered when boot api server, r %s", r))
 						}
 					}()
 					err := router.Fiber.Listen(fmt.Sprintf("%s:%d", config.Host, config.Port))
@@ -41,7 +43,7 @@ func Start(
 				return nil
 			},
 			OnStop: func(context.Context) error {
-				fmt.Println("Stopping api application")
+				logger.Info("Stopping api application")
 				return nil
 			},
 		},

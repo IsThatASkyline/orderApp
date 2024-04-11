@@ -12,5 +12,6 @@ var Module = fx.Module(
 		config.NewDBConfig,
 		config.NewAPIConfig,
 		config.NewAppConfig,
+		config.NewLoggerConfig,
 	),
 )

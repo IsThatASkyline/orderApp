@@ -2,6 +2,7 @@ package di
 
 import (
 	"github.com/IsThatASkyline/fiberGo/order/internal/infrastructure/di/factories/db"
+	"github.com/IsThatASkyline/fiberGo/order/internal/infrastructure/di/factories/logger"
 	"github.com/IsThatASkyline/fiberGo/order/internal/infrastructure/di/factories/services"
 	"go.uber.org/fx"
 )
@@ -11,5 +12,6 @@ var Module = fx.Module(
 	fx.Options(
 		db.Module,
 		services.Module,
+		logger.Module,
 	),
 )

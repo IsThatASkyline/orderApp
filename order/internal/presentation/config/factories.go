@@ -3,6 +3,7 @@ package config
 import (
 	load "github.com/IsThatASkyline/fiberGo/order/internal/infrastructure/config"
 	db "github.com/IsThatASkyline/fiberGo/order/internal/infrastructure/db/config"
+	logger "github.com/IsThatASkyline/fiberGo/order/internal/infrastructure/logger/config"
 	api "github.com/IsThatASkyline/fiberGo/order/internal/presentation/api/config"
 )
 
@@ -20,4 +21,8 @@ func NewAppConfig(config Config) AppConfig {
 func NewAPIConfig(config Config) api.APIConfig {
 	config.APIConfig.Mode = config.AppConfig.Mode
 	return config.APIConfig
+}
+func NewLoggerConfig(config Config) logger.LoggerConfig {
+	config.LoggerConfig.Mode = config.AppConfig.Mode
+	return config.LoggerConfig
 }
