@@ -1,4 +1,4 @@
-package factories
+package db
 
 import (
 	"github.com/IsThatASkyline/fiberGo/internal/infrastructure/db"

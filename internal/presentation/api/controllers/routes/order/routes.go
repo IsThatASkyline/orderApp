@@ -1,12 +1,13 @@
 package order
 
 import (
-	"github.com/IsThatASkyline/fiberGo/internal/presentation/api/controllers/handlers"
-	"github.com/gofiber/fiber/v3"
+	"github.com/IsThatASkyline/fiberGo/internal/presentation/api/controllers/handlers/order"
+	"github.com/IsThatASkyline/fiberGo/internal/presentation/api/engine"
 )
 
+/*
 type Routes struct {
-	controller *handlers.Handler
+	controller *order.Handler
 }
 
 func (r Routes) Setup(router *fiber.App) {
@@ -17,7 +18,24 @@ func (r Routes) Setup(router *fiber.App) {
 }
 
 func NewOrderRoutes(
-	controller *handlers.Handler,
+	controller *order.Handler,
 ) Routes {
 	return Routes{controller: controller}
+}
+*/
+
+type Routes struct {
+	engine.GroupRoutes
+	controller order.Handler
+}
+
+func (r Routes) Setup() {
+	r.Get("/", r.controller.IndexHandler)
+}
+
+func NewOrderRoutes(
+	group engine.GroupRoutes,
+	controller order.Handler,
+) Routes {
+	return Routes{controller: controller, GroupRoutes: group}
 }

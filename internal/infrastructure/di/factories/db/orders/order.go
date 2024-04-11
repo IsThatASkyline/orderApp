@@ -1,4 +1,4 @@
-package db
+package orders
 
 import (
 	appRepo "github.com/IsThatASkyline/fiberGo/internal/application/order/interfaces/repo"
