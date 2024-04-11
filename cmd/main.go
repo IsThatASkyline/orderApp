@@ -1,9 +1,8 @@
 package main
 
 import (
-	"context"
-	postgresDB "github.com/IsThatASkyline/fiberGo/internal/infrastructure/db"
-	"github.com/gofiber/fiber/v3"
+	"github.com/IsThatASkyline/fiberGo/internal/infrastructure/di"
+	"github.com/IsThatASkyline/fiberGo/internal/presentation/api"
 	_ "github.com/lib/pq"
 	"go.uber.org/fx"
 )
@@ -26,6 +25,7 @@ func main() {
 }
 */
 
+/*
 func registerHooks(
 	lifecycle fx.Lifecycle,
 	app *fiber.App,
@@ -47,7 +47,16 @@ func main() {
 	fx.New(
 		fx.Provide(postgresDB.BuildConnection),
 		fx.Provide(fiber.New),
+		fx.Invoke(order.New),
 		fx.Invoke(registerHooks),
 	).Run()
 	// Initialize a new Fiber app
+}
+*/
+
+func main() {
+	fx.New(
+		di.Module,
+		api.Module,
+	).Run()
 }
