@@ -8,7 +8,6 @@ import (
 	"github.com/IsThatASkyline/fiberGo/order/internal/presentation/api/controllers/routes"
 	"github.com/IsThatASkyline/fiberGo/order/internal/presentation/api/engine"
 	"github.com/IsThatASkyline/fiberGo/order/internal/presentation/di/api"
-	fibRec "github.com/gofiber/fiber/v3/middleware/recover"
 	"go.uber.org/fx"
 )
 
@@ -25,7 +24,7 @@ func Start(
 	routers routes.Routes, //nolint:all
 ) {
 	routers.Setup()
-	router.Fiber.Use(fibRec.New())
+
 	lifecycle.Append(
 		fx.Hook{
 			OnStart: func(context.Context) error {
