@@ -1,11 +1,9 @@
-package repo
+package usecases
 
 import (
 	"github.com/IsThatASkyline/fiberGo/order/internal/application/order/dto"
 )
 
-type OrderRepo interface {
+type GetAllOrders interface {
 	GetAllOrders() ([]dto.Order, error)
-	AddOrder(order *dto.Order) error
-	GetOrder(uid string) (dto.Order, error)
 }

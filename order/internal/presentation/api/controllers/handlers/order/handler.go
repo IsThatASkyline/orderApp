@@ -2,10 +2,9 @@ package order
 
 import (
 	"encoding/json"
+	"github.com/IsThatASkyline/fiberGo/order/internal/application/order/dto"
 	"github.com/IsThatASkyline/fiberGo/order/internal/application/order/interfaces/services"
-	"github.com/IsThatASkyline/fiberGo/order/internal/infrastructure/db/models"
 	"github.com/gofiber/fiber/v3"
-	"github.com/gofiber/fiber/v3/log"
 )
 
 type Handler struct {
@@ -13,28 +12,35 @@ type Handler struct {
 }
 
 func (h *Handler) GetOrder(c fiber.Ctx) error {
-	getOrder, err := h.service.GetOrder(c.Params("id"))
-	if err != nil {
-		log.Fatalf("hzhz: %s", err.Error())
+	orderID := c.Params("id")
+	if orderID == "" {
+		return fiber.ErrInternalServerError
 	}
-	return c.JSON(getOrder)
+	order, err := h.service.GetOrderByID(orderID)
+	if err != nil {
+		c.Status(fiber.StatusNotFound)
+		return c.JSON("Page not found")
+	}
+
+	return c.JSON(order)
 }
 
 func (h *Handler) CreateOrder(c fiber.Ctx) error {
-	var newOrder models.Order
+	var newOrder dto.Order
 	err := json.Unmarshal(c.Body(), &newOrder)
-	err = h.service.AddOrder(&newOrder)
 	if err != nil {
-		log.Fatalf("hzhz: %s", err.Error())
+		c.Status(fiber.StatusUnprocessableEntity)
+		return c.JSON("Проверьте отправленные данные")
 	}
-
-	return nil
+	err = h.service.CreateOrder(&newOrder)
+	return c.SendStatus(fiber.StatusCreated)
 }
 
 func (h *Handler) GetAllOrders(c fiber.Ctx) error {
 	orders, err := h.service.GetAllOrders()
 	if err != nil {
-		log.Fatalf("hzhz: %s", err.Error())
+		c.Status(fiber.StatusNotFound)
+		return c.JSON(err.Error())
 	}
 
 	return c.JSON(orders)
